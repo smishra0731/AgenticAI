@@ -1,30 +1,3 @@
-import os
-import requests
-import streamlit as st
-from pathlib import Path
-
-def info(k):
-    return f"len={len(k)} start={k[:7]!r} end={k[-4:]!r} whitespace={k != k.strip()}"
-
-try:
-    secret = st.secrets.get("OPENAI_API_KEY", "")
-except Exception as e:
-    secret = ""
-    st.write("Could not read secrets:", e)
-
-st.write("Key in Secrets:", info(secret))
-st.write("Key in environment:", info(os.getenv("OPENAI_API_KEY", "")))
-st.write(".env file present in repo:", Path(".env").exists())
-
-try:
-    r = requests.get(
-        "https://api.openai.com/v1/models",
-        headers={"Authorization": f"Bearer {secret.strip()}"},
-        timeout=20,
-    )
-    st.write("OpenAI check using the Secrets key:", r.status_code)
-except Exception as e:
-    st.write("OpenAI check failed:", e)
 import io
 from contextlib import redirect_stdout
 
